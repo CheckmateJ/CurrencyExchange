@@ -20,12 +20,12 @@ class MyWallet
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Currency;
+    private $currency;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $Amount;
+    private $amount;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class)
@@ -40,24 +40,24 @@ class MyWallet
 
     public function getCurrency(): ?string
     {
-        return $this->Currency;
+        return $this->currency;
     }
 
-    public function setCurrency(string $Currency): self
+    public function setCurrency(string $currency): self
     {
-        $this->Currency = $Currency;
+        $this->currency = $currency;
 
         return $this;
     }
 
     public function getAmount(): ?int
     {
-        return $this->Amount;
+        return $this->amount;
     }
 
-    public function setAmount(int $Amount): self
+    public function setAmount(int $amount): self
     {
-        $this->Amount = $Amount;
+        $this->amount = $amount;
 
         return $this;
     }
