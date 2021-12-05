@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DashboardController!{% endblock %}
+
+{% block body %}
+    <div class="d-flex me-5 ms-5 mt-5">
+        <table class="table table-hover w-50 ms-auto me-auto">
+            <thead>
+            <tr>
+                <th scope="col">Currency</th>
+                <th scope="col">Unit</th>
+                <th scope="col">Value</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Otto</td>
+                <td>Otto</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+            </tbody>
+        </table>
+        <div style="width: 50px"></div>
+        <table class="table table-hover w-50 ms-auto me-auto">
+            <thead>
+            <tr>
+                <th scope="col">Currency</th>
+                <th scope="col">Unit price</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Value</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for key, myWallet in wallet %}
+                <tr>
+                    <td>{{ myWallet.currency }}</td>
+                    <td class="rates-{{ rates[key].code }}">{{ rates[key].bid }}</td>
+                    <td>{{ myWallet.amount }}</td>
+                    <td>{{ (rates[key].bid * myWallet.amount) }}</td>
+                    <td><button class="btn btn-primary">Sell</button></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

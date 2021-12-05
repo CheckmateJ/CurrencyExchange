@@ -1,12 +1,15 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
-// any CSS you import will output into a single css file (app.css in this case)
 import './styles/main.scss';
-
-// start the Stimulus application
 import './bootstrap';
+
+let wallet = [];
+
+fetch('/currency').then(resp => resp.json()).then(data => {
+    wallet = data
+})
+setInterval(function () {
+    setTimeout(function () {
+        document.querySelector(`.rates-${wallet[0].code}`).innerText = wallet[0].bid;
+    }, 2000);
+}, 30000)
+
+

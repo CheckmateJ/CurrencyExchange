@@ -35,7 +35,7 @@
                                             password?</a></p>
 
                                     <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
-                                    <input type="hidden" name="go_to" value="{{ path('settings') }} "/>
+                                    <input type="hidden" name="go_to" value="{{ path('dashboard') }} "/>
                                     <input type="hidden" name="back_to" value="{{ path('login') }} "/>
                                     <input type="hidden" name="_csrf_token"
                                            value="{{ csrf_token('authenticate') }}">
