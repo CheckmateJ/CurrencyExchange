@@ -31,7 +31,7 @@ class DashboardController extends AbstractController
     }
 
     /**
-     * @Route("/currency", name="currency_price")
+     * @Route("/currency/wallet", name="currency_wallet")
      */
     public function getCurrentCurrencyPrice()
     {
