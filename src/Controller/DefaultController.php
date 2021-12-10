@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\AvailableMoney;
 use App\Entity\MyWallet;
+use App\Form\MoneyType;
 use App\Form\MyWalletType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,5 +35,28 @@ class DefaultController extends AbstractController
         return $this->render('default/index.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/app/settings/available/money", name="settings_money")
+     */
+    public function availableMoney(Request $request): Response
+    {
+        $money = new AvailableMoney();
+
+        $form = $this->createForm(MoneyType::class, $money);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($money);
+            $em->flush();
+            return $this->redirectToRoute('settings_money');
+        }
+
+        return $this->render('dashboard/money.html.twig', [
+            'form' => $form->createView()
+            ]);
+
     }
 }

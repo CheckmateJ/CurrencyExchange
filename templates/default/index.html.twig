@@ -3,6 +3,7 @@
 {% block title %}Hello DefaultController!{% endblock %}
 
 {% block body %}
+    <a href="{{ path('settings_money') }}">Available money </a>
     <div class="container d-flex">
         <form method="post" class="me-auto ms-auto mt-2">
             {{ form_start(form) }}

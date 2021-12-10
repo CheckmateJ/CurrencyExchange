@@ -42,8 +42,7 @@ class DashboardController extends AbstractController
     public function getMyWalletCurrency()
     {
         $jsonCurrency = json_decode(file_get_contents('https://api.nbp.pl/api/exchangerates/tables/C/'));
-        $wallet = $this->em->getRepository(MyWallet::class)->findAll();
-
+        $wallet = $this->em->getRepository(MyWallet::class)->findBy(['user' => $this->getUser()->getId()]);
         $currency = [];
         $rates = [];
 
