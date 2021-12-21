@@ -18,6 +18,7 @@ setInterval(function () {
     }, 2000);
 }, 30000)
 
+let unitPrice;
 
 setTimeout(function () {
     for (const currenciesKey in currency) {
@@ -28,10 +29,10 @@ setTimeout(function () {
         let valueTd = document.createElement('td')
         let actionTd = document.createElement('td')
         let currencies = document.querySelector('.currencies')
-        console.log(currency[currenciesKey])
         currencyTd.innerText = currency[currenciesKey].currency
         uniTd.innerText = 1;
-        valueTd.innerText = currency[currenciesKey].ask;
+        unitPrice = currency[currenciesKey].ask;
+        valueTd.innerText = unitPrice;
         actionTd.innerHTML = '<button>Buy</button>'
 
         currencies.appendChild(tr)
@@ -42,3 +43,20 @@ setTimeout(function () {
     }
 
 }, 2000)
+
+document.querySelectorAll('.btn-sell').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+        const value = prompt('How much do you want to sell ?')
+        let amount = e.target.dataset.amount;
+        let currency = e.target.dataset.currency;
+        console.log(currency)
+        if (parseInt(value) > parseInt(amount)) {
+            alert('You don\'t have enough money');
+        } else {
+            let newAmount = amount - value;
+            let wallet = e.target.dataset.price * value;
+            document.querySelector(`.my-wallet-amount-${currency}`).innerText = newAmount;
+            document.querySelector(`.my-wallet-value-${currency}`).innerText = newAmount * unitPrice ;
+        }
+    })
+});

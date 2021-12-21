@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\AvailableMoney;
 use App\Entity\MyWallet;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,11 +23,15 @@ class DashboardController extends AbstractController
     /**
      * @Route("/dashboard", name="dashboard")
      */
-    public function index(SerializerInterface $serializer): Response
+    public function index(): Response
     {
+
+        $money = $this->em->getRepository(AvailableMoney::class)->findOneBy([]);
+
         return $this->render('dashboard/index.html.twig', [
             'wallet' => $this->getMyWalletCurrency()[0],
-            'rates' => $this->getMyWalletCurrency()[1]
+            'rates' => $this->getMyWalletCurrency()[1],
+            'money' => $money
         ]);
     }
 
@@ -57,4 +62,7 @@ class DashboardController extends AbstractController
         }
         return [$wallet, $rates];
     }
+
+
+
 }
