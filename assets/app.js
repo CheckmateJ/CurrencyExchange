@@ -1,8 +1,8 @@
 import './styles/main.scss';
 import './bootstrap';
+import axios from "axios";
 
-let wallet = [];
-let currency = null;
+let wallet = [], myWallet = [], currency = null, newAmount, unitPrice, addMoney;
 
 fetch('/currency/wallet').then(resp => resp.json()).then(data => {
     wallet = data
@@ -18,11 +18,8 @@ setInterval(function () {
     }, 2000);
 }, 30000)
 
-let unitPrice;
-
 setTimeout(function () {
     for (const currenciesKey in currency) {
-
         let tr = document.createElement('tr');
         let currencyTd = document.createElement('td')
         let uniTd = document.createElement('td')
@@ -44,19 +41,30 @@ setTimeout(function () {
 
 }, 2000)
 
+
 document.querySelectorAll('.btn-sell').forEach(btn => {
     btn.addEventListener('click', function (e) {
+        currency = e.target.dataset.currency;
         const value = prompt('How much do you want to sell ?')
         let amount = e.target.dataset.amount;
-        let currency = e.target.dataset.currency;
-        console.log(currency)
+
         if (parseInt(value) > parseInt(amount)) {
             alert('You don\'t have enough money');
         } else {
-            let newAmount = amount - value;
-            let wallet = e.target.dataset.price * value;
+            if (myWallet.length > 0 && myWallet.filter(value => value.currency === currency).length > 0) {
+                let currencyArr = myWallet.filter(value => value.currency === currency);
+                amount = currencyArr[currencyArr.length - 1].amount;
+            }
+
+            newAmount = amount - value;
+            addMoney = value * e.target.dataset.price;
+            myWallet.push({'currency': currency, 'amount': newAmount})
             document.querySelector(`.my-wallet-amount-${currency}`).innerText = newAmount;
-            document.querySelector(`.my-wallet-value-${currency}`).innerText = newAmount * unitPrice ;
+            document.querySelector(`.my-wallet-value-${currency}`).innerText = newAmount * e.target.dataset.price;
+            let availableMoney = document.querySelector(`.available-money`);
+            availableMoney.innerText =  parseInt(availableMoney.innerText) + addMoney;
+
+            axios.post('/currency/wallet/update', {money: addMoney, newAmount: newAmount, currency: currency}).then(response => console.log(response))
         }
     })
 });

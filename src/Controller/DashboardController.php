@@ -7,6 +7,7 @@ use App\Entity\MyWallet;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -63,6 +64,25 @@ class DashboardController extends AbstractController
         return [$wallet, $rates];
     }
 
+    /**
+     * @Route("/currency/wallet/update", name="currency_wallet_update", methods={"POST"})
+     */
+    public function updateCurrencyWallet(Request $request)
+    {
+        $content = json_decode($request->getContent());
+        $money = $this->em->getRepository(AvailableMoney::class)->findOneBy([]);
+        $pln = $money->getPLN();
+
+        $wallet = $this->em->getRepository(MyWallet::class)->findOneBy(['currency' => $content->currency]);
+
+        $wallet->setAmount($content->newAmount);
+        $money->setPLN($pln + $content->money);
+        $this->em->persist($money);
+        $this->em->persist($wallet);
+        $this->em->flush();
+
+        return new JsonResponse($content);
+    }
 
 
 }
