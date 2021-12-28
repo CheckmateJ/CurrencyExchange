@@ -30,7 +30,7 @@ setTimeout(function () {
         uniTd.innerText = 1;
         unitPrice = currency[currenciesKey].ask;
         valueTd.innerText = unitPrice;
-        actionTd.innerHTML = '<button>Buy</button>'
+        actionTd.innerHTML = `<button class="btn-buy" data-price="${currency[currenciesKey].ask}" >Buy</button>`
 
         currencies.appendChild(tr)
         currencies.appendChild(currencyTd)
@@ -38,8 +38,23 @@ setTimeout(function () {
         currencies.appendChild(valueTd)
         currencies.appendChild(actionTd)
     }
+    document.querySelectorAll('.btn-buy').forEach(btn => {
+        btn.addEventListener('click', function(e){
+            const value = prompt('How much do you want to buy?');
+            let availableMoney = document.querySelector(`.available-money`);
+            const price = e.target.dataset.price;
+            let amount = price * value;
+            if(amount >  parseInt(availableMoney.innerText)){
+                return alert('You don\'t have enough money')
+            }else{
+                availableMoney.innerText = parseInt(availableMoney.innerText) - amount;
+            }
+        })
+    })
 
 }, 2000)
+
+
 
 
 document.querySelectorAll('.btn-sell').forEach(btn => {
