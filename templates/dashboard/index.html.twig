@@ -29,12 +29,17 @@
             </thead>
             <tbody>
             {% for key, myWallet in wallet %}
-                <tr>
+                <tr class="row-{{ myWallet.currency }}">
                     <td>{{ myWallet.currency }}</td>
                     <td class="rates-{{ rates[key].code }}">{{ rates[key].bid }}</td>
                     <td class="my-wallet-amount-{{ myWallet.currency }}">{{ myWallet.amount }}</td>
                     <td class="my-wallet-value-{{ myWallet.currency }}">{{ (rates[key].bid * myWallet.amount) }}</td>
-                    <td><button class="btn btn-primary btn-sell {{ myWallet.currency }}" data-currency="{{ myWallet.currency }}"  data-price="{{ rates[key].bid }}" data-amount="{{ myWallet.amount }}">Sell</button></td>
+                    <td>
+                        <button class="btn btn-primary btn-sell d-flex align-items-center justify-content-center {{ myWallet.currency }}"
+                                data-currency="{{ myWallet.currency }}" style="width: 80px; height: 25px;"
+                                data-price="{{ rates[key].bid }}" data-amount="{{ myWallet.amount }}">Sell
+                        </button>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -53,7 +53,13 @@ class DashboardController extends AbstractController
         $rates = [];
 
         foreach ($wallet as $value) {
-            $currency[] .= strtoupper($value->getCurrency());
+            if($value->getAmount() == 0){
+                $this->em->remove($value);
+                $this->em->flush();
+            }else{
+                $currency[] .= strtoupper($value->getCurrency());
+            }
+
         }
 
         foreach ($jsonCurrency[0]->rates as $rate) {
@@ -73,10 +79,17 @@ class DashboardController extends AbstractController
         $money = $this->em->getRepository(AvailableMoney::class)->findOneBy([]);
         $pln = $money->getPLN();
 
-        $wallet = $this->em->getRepository(MyWallet::class)->findOneBy(['currency' => $content->currency]);
-
-        $wallet->setAmount($content->newAmount);
-        $money->setPLN($pln + $content->money);
+        if ($content->action == 'sell') {
+            $wallet = $this->em->getRepository(MyWallet::class)->findOneBy(['currency' => $content->currency]);
+            $wallet->setAmount($content->newAmount);
+            $money->setPLN($pln + $content->money);
+        } else {
+            $money->setPLN($pln - $content->money);
+            $wallet = new MyWallet();
+            $wallet->setUser($this->getUser());
+            $wallet->setCurrency($content->currency);
+            $wallet->setAmount($content->amount);
+        }
         $this->em->persist($money);
         $this->em->persist($wallet);
         $this->em->flush();
